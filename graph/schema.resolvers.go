@@ -6,39 +6,78 @@ package graph
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 
 	"github.com/ehehe90/gqlgen-study/graph/model"
+	"github.com/ehehe90/gqlgen-study/util"
 )
 
 // CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (string, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	todo := &model.Todo{
+		ID: util.CreateUniqueID(),
+		Text: input.Text,
+		Done: false,
+		UserID: input.UserID,
+	}
+	res := r.DB.Create(&todo)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	return todo, nil
 }
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
+	user := &model.User{
+		ID: util.CreateUniqueID(),
+		Name: input.Name,
+	}
+	res := r.DB.Create(&user)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+	var todos []*model.Todo
+    res := r.DB.Find(&todos)
+    if err := res.Error; err != nil {
+        return nil, err
+    }
+    return todos, nil
 }
 
 // Todo is the resolver for the todo field.
 func (r *queryResolver) Todo(ctx context.Context, id string) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todo - todo"))
+	todo := &model.Todo{ID: id}
+    res := r.DB.First(&todo)
+    if err := res.Error; err != nil {
+        return nil, err
+    }
+    return todo, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	var users []*model.User
+    res := r.DB.Find(&users)
+    if err := res.Error; err != nil {
+        return nil, err
+    }
+    return users, nil
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	user := &model.User{ID: id}
+    res := r.DB.First(user)
+    if err := res.Error; err != nil {
+        return nil, err
+    }
+    return user, nil
 }
 
 // Mutation returns MutationResolver implementation.

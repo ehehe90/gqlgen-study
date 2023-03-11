@@ -4,4 +4,13 @@ package graph
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-type Resolver struct{}
+import (
+	"github.com/jinzhu/gorm"
+
+	"github.com/ehehe90/gqlgen-study/graph/model"
+)
+
+type Resolver struct{
+	users []*model.User
+	DB *gorm.DB
+}

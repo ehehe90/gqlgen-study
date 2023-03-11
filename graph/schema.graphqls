@@ -6,6 +6,7 @@ type Todo {
   id: ID!
   text: String!
   done: Boolean!
+  userId: String!
   user: User!
 }
 
@@ -32,8 +33,7 @@ input NewUser {
   name: String!
 }
 
-# createTodo の型が元と違う
 type Mutation {
-  createTodo(input: NewTodo!): ID!
-  createUser(input: NewUser!): ID!
+  createTodo(input: NewTodo!): Todo!
+  createUser(input: NewUser!): User!
 }
